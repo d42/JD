@@ -1,0 +1,32 @@
+!!! 5
+html(lang='en')
+  head
+    title='routes'
+  body
+    script(src="http://maplib.khtml.org/khtml.maplib/khtml_all.js")
+    script(src='http://zeptojs.com/zepto.min.js')
+    div#map(style="width:800px;height:500px")
+
+    script.
+        var map=khtml.maplib.Map(document.getElementById("map"));
+        map.centerAndZoom(new khtml.maplib.LatLng(38.430946615106265,13.238569903377112),1); //latitude, longitude, zoom
+
+        function create_map(data) {
+            for(entry of data) {
+                var geo = entry.coordinate;
+                var title = [entry['code'], entry['name']].join(':')
+                var position = khtml.maplib.LatLng(geo.y_lat, geo.x_lon);
+                var marker = new khtml.maplib.overlay.Marker({
+                    position: position,
+                    map: map,
+                    title: title
+                });
+                }
+        }
+
+    script.
+        $.getJSON("#{url_for('route', line=line)}", function(data) {
+            console.log(data);
+            create_map(data);
+        });
+
