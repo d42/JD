@@ -79,6 +79,11 @@ class Stop(TransitType):
     type_name = 'stop'
 
 
+    @property
+    def position(self):
+        return self.lat, self.lon
+
+
 class Line(TransitType):
     _search_attribute = 'name'
     _remaps = {'name': 'lineSymbol', 'routes': 'directions'}
@@ -111,7 +116,7 @@ class Route(TransitType):
     def geo_direction_name(self):
         d_lat, d_lon = self.geo_direction
         dest_1 = 'south' if d_lat > 0 else 'north'
-        dest_2 = 'east' if d_lon > 0 else 'west'
+        dest_2 = 'east' if d_lon < 0 else 'west'
         return [dest_1, dest_2]
 
 
